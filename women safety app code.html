@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHE-SAFE</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Segoe UI,Arial;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  background:#ffffff;
+  color:#1f2937;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+  width:260px;
+  background:linear-gradient(180deg,#7c3aed,#6d28d9);
+  padding:20px;
+  box-shadow:4px 0 20px rgba(0,0,0,.2);
+}
+
+.sidebar h2{
+  text-align:center;
+  margin-bottom:30px;
+  color:#ffffff;
+}
+
+.sidebar button{
+  width:100%;
+  background:none;
+  border:none;
+  color:#ffffff;
+  padding:14px;
+  margin-bottom:8px;
+  text-align:left;
+  font-size:16px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.sidebar button:hover{
+  background:rgba(255,255,255,.2);
+  transform:translateX(5px);
+}
+
+/* ================= MAIN ================= */
+.main{
+  flex:1;
+  padding:30px;
+  overflow:auto;
+}
+
+/* Section animation */
+.section{
+  display:none;
+  animation:fadeSlide .4s ease;
+}
+
+.section.active{
+  display:block;
+}
+
+@keyframes fadeSlide{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ================= CARD ================= */
+.card{
+  background:#ffffff;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.1);
+  border:1px solid #ddd6fe;
+}
+
+h3,h4{color:#7c3aed;}
+
+/* Login fields - remove purple border */
+input,select,textarea{
+  width:100%;
+  padding:10px;
+  margin-bottom:12px;
+  border-radius:8px;
+  border:1px solid #ccc; /* default gray */
+  background:#ffffff;
+  color:#1f2937;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:#999;
+  outline:none;
+  box-shadow:none;
+}
+
+.btn{
+  background:#7c3aed;
+  color:white;
+  border:none;
+  padding:12px 20px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.btn:hover{background:#6d28d9;}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+
+/* Avatar */
+.avatar{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#7c3aed,#6d28d9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:36px;
+  font-weight:bold;
+  margin-bottom:15px;
+  color:white;
+  overflow:hidden;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+/* SOS */
+.sos{
+  background:#7c3aed;
+  color:white;
+  text-align:center;
+  padding:25px;
+  font-size:22px;
+  border-radius:16px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.sos:hover{
+  background:#6d28d9;
+  transform:scale(1.02);
+}
+
+/* Offline Banner */
+#offlineBanner{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#6d28d9;
+  color:white;
+  text-align:center;
+  padding:10px;
+  display:none;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  body{flex-direction:column;}
+  .sidebar{
+    width:100%;
+    display:flex;
+    justify-content:space-around;
+  }
+  .sidebar button{
+    text-align:center;
+    font-size:14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+<h2>SHE-SAFE</h2>
+<button onclick="navigate('login')">Login</button>
+<button onclick="navigate('home')">Home</button>
+<button onclick="navigate('contacts')">Emergency Contacts</button>
+<button onclick="navigate('profile')">Profile</button>
+</div>
+
+<div class="main">
+
+<!-- LOGIN -->
+<div id="login" class="section active">
+<div class="card">
+<h3>User Login & Setup</h3>
+
+<div class="grid">
+<div>
+<label>Full Name</label><input id="name">
+<label>Email</label><input id="email">
+<label>Mobile Number</label><input id="phone">
+<label>Occupation</label><input id="occupation">
+<label>Age</label><input id="age">
+</div>
+
+<div>
+<label>Date of Birth</label><input type="date" id="dob">
+<label>Blood Group</label>
+<select id="blood">
+<option>A+</option><option>A-</option>
+<option>B+</option><option>B-</option>
+<option>O+</option><option>O-</option>
+<option>AB+</option><option>AB-</option>
+</select>
+<label>Home Address</label>
+<textarea id="address"></textarea>
+</div>
+</div>
+
+<h4>Medical Information</h4>
+<label><input type="checkbox" id="asthma"> Asthma</label><br>
+<label><input type="checkbox" id="diabetes"> Diabetes</label>
+
+<h4>Safety Settings</h4>
+<label>Location Sharing Preference</label>
+<select id="locationPref">
+<option>Always</option>
+<option>Only during SOS</option>
+<option>Disabled</option>
+</select>
+
+<label>Check-in Timer</label>
+<select id="timer">
+<option>15 min</option>
+<option>30 min</option>
+<option>1 hour</option>
+</select>
+
+<label>GPS Permission</label>
+<select id="gpsPermission">
+<option>Allow</option>
+<option>Deny</option>
+</select>
+
+<label>Siren Sound</label>
+<select id="sirenOption">
+<option>Enable</option>
+<option>Disable</option>
+</select>
+
+<h4>Privacy & Consent</h4>
+<label><input type="checkbox" id="consent"> I agree to privacy policy</label><br><br>
+
+<button class="btn" onclick="loginUser()">Continue</button>
+</div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="section">
+<div class="card">
+<h3 id="welcome"></h3>
+<p><b>Emergency Contacts:</b> <span id="contactCount">0</span>/5</p>
+<p><b>Location Sharing:</b> <span id="locStatus"></span></p>
+<p><b>Check-in Timer:</b> <span id="timerStatus"></span></p>
+<p><b>GPS:</b> <span id="gpsStatus"></span></p>
+</div>
+
+<div class="sos" onclick="sendSOS()">🚨 SOS ALERT</div>
+</div>
+
+<!-- CONTACTS -->
+<div id="contacts" class="section">
+<div class="card">
+<h3>Emergency Contacts (Max 5)</h3>
+<div id="contactInputs"></div>
+<button class="btn" onclick="saveContacts()">Save Contacts</button>
+</div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="section">
+<div class="card">
+<div class="avatar" id="avatar">?</div>
+<input type="file" id="photoUpload" accept="image/*">
+<h3>User Profile</h3>
+<div id="profileData"></div>
+</div>
+</div>
+
+</div>
+
+<div id="offlineBanner">You are Offline - Limited Mode Active</div>
+
+<audio id="sirenAudio" src="https://actions.google.com/sounds/v1/alarms/siren_whistle.ogg"></audio>
+
+<script>
+const user={photo:''};
+const contacts=[];
+
+function navigate(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+if(id==='contacts') loadContacts();
+if(id==='profile') loadProfile();
+}
+
+function loginUser(){
+if(!consent.checked){alert("Please accept privacy policy");return;}
+
+user.name=name.value;
+user.email=email.value;
+user.phone=phone.value;
+user.occupation=occupation.value;
+user.age=age.value;
+user.dob=dob.value;
+user.blood=blood.value;
+user.address=address.value;
+user.asthma=asthma.checked;
+user.diabetes=diabetes.checked;
+user.locationPref=locationPref.value;
+user.timer=timer.value;
+user.gps=gpsPermission.value;
+user.siren=sirenOption.value;
+
+welcome.innerText="Welcome, "+user.name;
+locStatus.innerText=user.locationPref;
+timerStatus.innerText=user.timer;
+gpsStatus.innerText=user.gps;
+avatar.innerText=user.name.charAt(0).toUpperCase();
+
+navigate('home');
+}
+
+// Profile photo upload
+photoUpload.addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      user.photo = ev.target.result;
+      avatar.innerHTML = `<img src="${user.photo}" alt="Profile Photo">`;
+    }
+    reader.readAsDataURL(file);
+  }
+});
+
+function loadContacts(){
+contactInputs.innerHTML='';
+for(let i=0;i<5;i++){
+contactInputs.innerHTML+=`<input placeholder="Contact ${i+1} Phone Number">`;
+}
+}
+
+function saveContacts(){
+contacts.length=0;
+document.querySelectorAll('#contactInputs input').forEach(i=>{
+if(i.value) contacts.push(i.value);
+});
+contactCount.innerText=contacts.length;
+alert("Contacts Saved");
+}
+
+function sendSOS(){
+if(contacts.length===0){alert("No contacts added");return;}
+
+if(user.siren==="Enable"){ document.getElementById("sirenAudio").play(); }
+
+if(user.gps==="Allow" && navigator.geolocation){
+navigator.geolocation.getCurrentPosition(pos=>{
+alert(`SOS ALERT Name: ${user.name} Phone: ${user.phone} Location: https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`);
+});
+} else {
+alert("SOS Sent (GPS Disabled)");
+}
+}
+
+function loadProfile(){
+profileData.innerHTML=`
+<p><b>Name:</b> ${user.name}</p>
+<p><b>Email:</b> ${user.email}</p>
+<p><b>Phone:</b> ${user.phone}</p>
+<p><b>Occupation:</b> ${user.occupation}</p>
+<p><b>Age:</b> ${user.age}</p>
+<p><b>DOB:</b> ${user.dob}</p>
+<p><b>Blood Group:</b> ${user.blood}</p>
+<p><b>Address:</b> ${user.address}</p>
+<p><b>Medical:</b> ${(user.asthma?'Asthma ':'')+(user.diabetes?'Diabetes':'')}</p>`;
+if(user.photo){
+avatar.innerHTML = `<img src="${user.photo}" alt="Profile Photo">`;
+}
+}
+
+function updateOnlineStatus(){
+offlineBanner.style.display=navigator.onLine?"none":"block";
+}
+
+window.addEventListener("online",updateOnlineStatus);
+window.addEventListener("offline",updateOnlineStatus);
+updateOnlineStatus();
+</script>
+
+</body>
+</html>
